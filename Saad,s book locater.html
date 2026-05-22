@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Locator App</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e9ffe9;
+      border-left: 5px solid green;
+      display: none;
+    }
+
+    .book-list {
+      margin-top: 20px;
+    }
+
+    .book-item {
+      background: #fafafa;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📚 Book Locator App</h1>
+
+  <h3>Add New Book</h3>
+
+  <input type="text" id="bookName" placeholder="Enter Book Name">
+  <input type="text" id="cupboard" placeholder="Enter Cupboard Number">
+  <input type="text" id="row" placeholder="Enter Row Number">
+  <input type="text" id="line" placeholder="Enter Shelf / Line Number">
+
+  <button onclick="addBook()">Add Book</button>
+
+  <hr>
+
+  <h3>Search Book</h3>
+
+  <input type="text" id="searchBook" placeholder="Search Book Name">
+
+  <button onclick="searchBook()">Search</button>
+
+  <div class="result" id="result"></div>
+
+  <div class="book-list" id="bookList"></div>
+</div>
+
+<script>
+  let books = [];
+
+  function addBook() {
+    const name = document.getElementById('bookName').value;
+    const cupboard = document.getElementById('cupboard').value;
+    const row = document.getElementById('row').value;
+    const line = document.getElementById('line').value;
+
+    if(name === '' || cupboard === '' || row === '' || line === '') {
+      alert('Please fill all fields');
+      return;
+    }
+
+    const book = {
+      name,
+      cupboard,
+      row,
+      line
+    };
+
+    books.push(book);
+
+    displayBooks();
+
+    alert('Book Added Successfully');
+
+    document.getElementById('bookName').value = '';
+    document.getElementById('cupboard').value = '';
+    document.getElementById('row').value = '';
+    document.getElementById('line').value = '';
+  }
+
+  function displayBooks() {
+    const bookList = document.getElementById('bookList');
+
+    bookList.innerHTML = '<h3>Saved Books</h3>';
+
+    books.forEach((book) => {
+      bookList.innerHTML += `
+        <div class="book-item">
+          <b>${book.name}</b><br>
+          Cupboard: ${book.cupboard} | Row: ${book.row} | Shelf: ${book.line}
+        </div>
+      `;
+    });
+  }
+
+  function searchBook() {
+    const search = document.getElementById('searchBook').value.toLowerCase();
+
+    const resultDiv = document.getElementById('result');
+
+    const found = books.find(book =>
+      book.name.toLowerCase() === search
+    );
+
+    if(found) {
+      resultDiv.style.display = 'block';
+
+      resultDiv.innerHTML = `
+        📖 <b>${found.name}</b><br><br>
+        Cupboard Number: <b>${found.cupboard}</b><br>
+        Row Number: <b>${found.row}</b><br>
+        Shelf / Line Number: <b>${found.line}</b>
+      `;
+    }
+    else {
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = '❌ Book Not Found';
+    }
+  }
+</script>
+
+</body>
+</html>
